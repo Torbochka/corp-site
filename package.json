@@ -25,6 +25,7 @@
   "dependencies": {
     "@koa/cors": "^2.2.3",
     "@nauma/eventemitter": "^1.0.7",
+    "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
     "formidable": "^1.2.1",
     "http-errors": "~1.6.2",
@@ -36,6 +37,7 @@
     "koa-pug": "^3.0.0-2",
     "koa-router": "^7.4.0",
     "koa-session": "^5.8.2",
+    "koa-session-mongoose": "^2.0.5",
     "koa-static": "^5.0.0",
     "lowdb": "^1.0.0",
     "mongoose": "^5.7.5",

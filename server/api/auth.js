@@ -2,7 +2,18 @@ const Router = require("koa-router");
 const router = new Router();
 const ENGINE = global.ENGINE;
 
-router.get("/api/registration", async ctx => {
+router.post("/registration", async ctx => {
+  try {
+    const user = await ENGINE.emit("registration", ctx.request.body);
+    ctx.body = { ...user };
+  } catch (error) {
+    ctx.flash("error", {
+      message: error.message,
+      status: error.status || 400
+    });
+    ctx.redirect("/error");
+  }
+
   // try {
   //   const data = await ENGINE.emit("index");
   //   const msgsemail = ctx.flash("msgsemail")[0];
