@@ -8,5 +8,9 @@
     "rolling": false,
     "renew": false
   },
-  "upload": "./dist/upload"
+  "upload": "./dist/upload",
+  "accessTokenSecret": "access",
+  "refreshTokenSecret": "refresh",
+  "accessTokenExpiredAt": 60000,
+  "refreshTokenExpiredAt": 5184000000
 }

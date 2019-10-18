@@ -38,12 +38,17 @@ app.use(
   })
 );
 
+// app.on("error", (err, ctx) => {
+//   ctx.response.body = {};
+//   ctx.render("pages/error", {
+//     status: ctx.response.status,
+//     error: ctx.response.message
+//   });
+// });
+
 app.on("error", (err, ctx) => {
-  ctx.response.body = {};
-  ctx.render("pages/error", {
-    status: ctx.response.status,
-    error: ctx.response.message
-  });
+  ctx.status = err.status;
+  ctx.body = { message: err.message };
 });
 
 app.use(

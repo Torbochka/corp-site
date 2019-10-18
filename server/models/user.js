@@ -24,13 +24,13 @@ const userSchema = new Schema({
   },
   accessToken: { type: String, default: "" },
   accessTokenExpiredAt: {
-    type: Date,
-    default: Date.now() + 24 * 60 * 60 * 1000
+    type: Number,
+    default: ""
   },
-  refreshToken: String,
+  refreshToken: { type: String, default: "" },
   refreshTokenExpiredAt: {
-    type: Date,
-    default: Date.now() + 60 * 24 * 60 * 60 * 1000
+    type: Number,
+    default: ""
   }
 });
 
