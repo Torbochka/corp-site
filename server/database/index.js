@@ -4,3 +4,6 @@ global.DATABASE = DATABASE;
 
 require("./auth");
 require("./profile");
+require("./users");
+require("./news");
+require("./permission");

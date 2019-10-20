@@ -4,3 +4,6 @@ global.ENGINE = ENGINE;
 
 require("./auth");
 require("./profile");
+require("./users");
+require("./news");
+require("./permission");

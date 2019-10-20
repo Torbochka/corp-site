@@ -42,5 +42,8 @@ router.get("/error", ctx => {
 
 router.use("/api", require("./auth"));
 router.use("/api", isAuthenticated, require("./profile"));
+router.use("/api", isAuthenticated, require("./users"));
+router.use("/api", isAuthenticated, require("./news"));
+router.use("/api", isAuthenticated, require("./permission"));
 
 module.exports = router;
