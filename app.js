@@ -38,16 +38,8 @@ app.use(
   })
 );
 
-// app.on("error", (err, ctx) => {
-//   ctx.response.body = {};
-//   ctx.render("pages/error", {
-//     status: ctx.response.status,
-//     error: ctx.response.message
-//   });
-// });
-
 app.on("error", (err, ctx) => {
-  ctx.status = err.status;
+  ctx.status = err.status || 500;
   ctx.body = { message: err.message };
 });
 
@@ -55,7 +47,7 @@ app.use(
   session(
     {
       store: new MongooseStore({ connection: mongoose }),
-      session: { ...config.session }
+      ...config.session
     },
     app
   )

@@ -20,6 +20,19 @@ DATABASE.on("db/user", async res => {
   }
 });
 
+DATABASE.on("db/userById", async res => {
+  try {
+    const user = await User.findOne({ _id: res.data }).exec();
+    if (!user) {
+      return res.replyErr({ message: "Пользователь не зарегистрирован!" });
+    }
+
+    res.reply(user);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 DATABASE.on("db/updateTokens", async res => {
   try {
     const {

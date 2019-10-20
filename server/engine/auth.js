@@ -3,6 +3,46 @@ const jwt = require("jsonwebtoken");
 const DATABASE = global.DATABASE;
 const ENGINE = global.ENGINE;
 
+const generateTokens = (
+  user,
+  {
+    accessTokenSecret,
+    refreshTokenSecret,
+    accessTokenExpiredAt,
+    refreshTokenExpiredAt
+  },
+  options = {}
+) => {
+  let { updateAccessToken = true, updateRefreshToken = true } = options;
+
+  let accessToken = user.accessToken;
+  let accessTokenExpiredAtDateNow = user.accessTokenExpiredAt;
+
+  if (updateAccessToken) {
+    accessTokenExpiredAtDateNow = Date.now() + accessTokenExpiredAt;
+    accessToken = jwt.sign({ id: user.id }, accessTokenSecret, {
+      expiresIn: accessTokenExpiredAtDateNow
+    });
+  }
+
+  let refreshToken = user.refreshToken;
+  let refreshTokenExpiredAtDateNow = user.refreshTokenExpiredAt;
+
+  if (updateRefreshToken) {
+    refreshTokenExpiredAtDateNow = Date.now() + refreshTokenExpiredAt;
+    refreshToken = jwt.sign({ id: user.id }, refreshTokenSecret, {
+      expiresIn: refreshTokenExpiredAtDateNow
+    });
+  }
+
+  return {
+    accessTokenExpiredAt: accessTokenExpiredAtDateNow,
+    refreshTokenExpiredAt: refreshTokenExpiredAtDateNow,
+    accessToken,
+    refreshToken
+  };
+};
+
 ENGINE.on("registration", async res => {
   try {
     const User = await DATABASE.emit("db/registration", res.data);
@@ -16,77 +56,66 @@ ENGINE.on("registration", async res => {
 ENGINE.on("login", async res => {
   try {
     const user = await DATABASE.emit("db/user", res.data);
-    const {
-      accessTokenSecret,
-      refreshTokenSecret,
-      accessTokenExpiredAt,
-      refreshTokenExpiredAt
-    } = config;
-
-    const accessToken = jwt.sign({ id: user.id }, accessTokenSecret, {
-      expiresIn: accessTokenExpiredAt
-    });
-    const refreshToken = jwt.sign({ id: user.id }, refreshTokenSecret, {
-      expiresIn: refreshTokenExpiredAt
-    });
+    const tokens = generateTokens(user, config);
 
     await DATABASE.emit("db/updateTokens", {
       user,
-      accessTokenExpiredAt,
-      refreshTokenExpiredAt,
-      accessToken,
-      refreshToken
+      ...tokens
     });
 
     res.reply({
-      accessToken,
-      accessTokenExpiredAt,
-      refreshToken,
-      refreshTokenExpiredAt
+      ...tokens
     });
   } catch (err) {
     res.replyErr({ message: err.message });
   }
 });
 
-ENGINE.on("refresh-token", async res => {
-  const headers = res.data;
+ENGINE.on("refresh-token", res => {
+  if (res.data.hasOwnProperty("authorization") && res.data.authorization) {
+    // const refreshToken = res.data.authorization.slice(7);
+    const refreshToken = res.data.authorization;
 
-  // // if refresh token exists
-  // if (data.refreshToken && data.refreshToken in tokenList) {
-  //   // 1
-  //
-  //   jwt.verify(data.refreshToken, config.refreshTokenSecret, (err, decoded) => {
-  //     if (err) {
-  //       tokenList[data.refreshToken] && delete tokenList[data.refreshToken]; // 1
-  //       return res.status(401).json({ error: true, message: err.message });
-  //     } else if (req.ip !== decoded.ip) {
-  //       //2
-  //       tokenList[data.refreshToken] && delete tokenList[data.refreshToken];
-  //       return res
-  //         .status(401)
-  //         .json({ error: true, message: "Your IP adress was changed" });
-  //     } else {
-  //       // 2
-  //       const user = {
-  //         name: "Test user",
-  //         ip: req.ip // 2
-  //       };
-  //       const token = jwt.sign(user, config.secret, {
-  //         expiresIn: config.tokenLife
-  //       });
-  //       const response = {
-  //         access_token: token,
-  //         access_token_expired_at: Date.now() + config.tokenLife * 1000
-  //       };
-  //
-  //       // update the token in the list
-  //       tokenList[data.refreshToken].token = token;
-  //
-  //       res.status(200).json(response);
-  //     }
-  //   }); //2
-  // } else {
-  //   res.status(404).send({ error: true, message: "Invalid request" });
-  // }
+    jwt.verify(
+      refreshToken,
+      config.refreshTokenSecret,
+      async (err, decoded) => {
+        if (err) {
+          return res.reply({ status: 401, message: err.message });
+        }
+
+        try {
+          const user = await DATABASE.emit("db/userById", decoded.id);
+
+          if (!user || refreshToken !== user.refreshToken) {
+            return res.replyErr({
+              status: 401,
+              message: "Ошибка авторизации"
+            });
+          }
+
+          let tokens = generateTokens(user, config);
+          if (user.refreshTokenExpiredAt <= Date.now()) {
+            await DATABASE.emit("db/updateTokens", {
+              user,
+              ...tokens
+            });
+
+            return res.reply({
+              ...tokens
+            });
+          }
+
+          tokens = generateTokens(user, config, { updateRefreshToken: false });
+          return res.reply({
+            ...tokens
+          });
+        } catch (err) {
+          res.replyErr({ message: err.message });
+        }
+      }
+    );
+  } else {
+    res.replyErr({ message: "Ошибка авторизации" });
+  }
 });
