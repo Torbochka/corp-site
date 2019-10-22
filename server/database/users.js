@@ -23,3 +23,19 @@ DATABASE.on("db/users/delete", async res => {
     console.error(error);
   }
 });
+
+DATABASE.on("db/users/permission", async res => {
+  try {
+    const { id, permission } = res.data;
+
+    const user = await User.findOne({ _id: id });
+
+    user.permission = permission;
+
+    await user.save();
+
+    res.reply(User.getUsersWithMainFields());
+  } catch (err) {
+    res.replyErr({ message: err.message });
+  }
+});

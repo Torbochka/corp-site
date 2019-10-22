@@ -26,4 +26,16 @@ router.delete("/users/:id", async ctx => {
   }
 });
 
+router.patch("/users/:id/permission", async ctx => {
+  try {
+    ctx.body = await ENGINE.emit("users/permission", ctx.request.body);
+  } catch (error) {
+    ctx.flash("error", {
+      message: error.message,
+      status: error.status || 400
+    });
+    ctx.redirect("/error");
+  }
+});
+
 module.exports = router.routes();
