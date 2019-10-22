@@ -31,7 +31,7 @@ app.use(errorHandler);
 app.use(
   cors({
     origin: "*",
-    allowMethods: ["GET", "POST", "PUT", "DELETE"],
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept"]
   })
 );
