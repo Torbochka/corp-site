@@ -73,7 +73,9 @@
           n),
           []
         ),
-        _ = x.a.create({ baseURL: "http://localhost:3000/api/" }),
+        _ = x.a.create({
+          baseURL: "https://loft-system-api.herokuapp.com/api/"
+        }),
         R = [],
         L = !1,
         I = function(e) {
@@ -2969,4 +2971,4 @@
   },
   [[195, 1, 2]]
 ]);
-//# sourceMappingURL=main.a1f221f0.chunk.js.map
+//# sourceMappingURL=main.2d8784ca.chunk.js.map
