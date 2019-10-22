@@ -1,14 +1,17 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 mongoose.Promise = global.Promise;
 
-const dbname = "mongodb://localhost:27017/loft-system";
-mongoose.connect(dbname, {
+let uri =
+  process.env.DB === "production" ? process.env.uriDB : process.env.uriDBTest;
+
+mongoose.connect(uri, {
   useNewUrlParser: true
 });
 
 mongoose.connection.on("connected", () => {
-  console.log(`Mongoose connection open ${dbname}`);
+  console.log(`Mongoose connection open ${uri}`);
 });
 
 mongoose.connection.on("error", err => {
