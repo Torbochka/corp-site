@@ -22,12 +22,12 @@ ENGINE.on("users/delete", async res => {
 ENGINE.on("users/permission", async res => {
   try {
     const {
-      decoded: { id },
+      params: { id },
       request: { body }
     } = res.data;
 
-    const users = await DATABASE.emit("db/users/permission", { id, body });
-    res.reply(users);
+    const user = await DATABASE.emit("db/users/permission", { id, ...body });
+    res.reply(user);
   } catch (err) {
     res.replyErr({ message: err.message });
   }

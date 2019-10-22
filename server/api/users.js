@@ -28,7 +28,7 @@ router.delete("/users/:id", async ctx => {
 
 router.patch("/users/:id/permission", async ctx => {
   try {
-    ctx.body = await ENGINE.emit("users/permission", ctx.request.body);
+    ctx.body = await ENGINE.emit("users/permission", ctx);
   } catch (error) {
     ctx.flash("error", {
       message: error.message,
