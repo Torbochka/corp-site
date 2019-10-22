@@ -4,7 +4,7 @@ const User = require("../models/user");
 DATABASE.on("db/user", async res => {
   try {
     const { username, password } = res.data;
-    const user = await User.findOne({ username: username }).exec();
+    const user = await User.findOne({ username: username });
 
     if (!user) {
       return res.replyErr({ message: "Пользователь не зарегистрирован!" });

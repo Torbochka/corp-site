@@ -33,8 +33,9 @@ Thumbs.db
 .vscode
 bower_components
 build
-
+dist/assets/upload
 06-webinar-auth
+05-webinar-socket
 node_week_4-master
 04_mongo
 03_koa

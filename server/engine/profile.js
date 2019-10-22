@@ -1,3 +1,9 @@
+const fs = require("fs");
+const util = require("util");
+const rename = util.promisify(fs.rename);
+const path = require("path");
+const config = require("../config/config");
+
 const DATABASE = global.DATABASE;
 const ENGINE = global.ENGINE;
 
@@ -15,10 +21,24 @@ ENGINE.on("profile/update", async res => {
   try {
     const {
       decoded: { id },
-      request: { body }
+      request: { files, body }
     } = res.data;
 
-    const user = await DATABASE.emit("db/profile/update", { id, ...body });
+    body.avatar = "";
+
+    if (files.avatar) {
+      const fullPath = path.join(
+        config.uploadFront,
+        `${Date.now()}-${files.avatar.name}`
+      );
+      await rename(files.avatar.path, `dist/${fullPath}`);
+      body.avatar = fullPath;
+    }
+
+    const user = await DATABASE.emit("db/profile/update", {
+      id,
+      ...body
+    });
 
     res.reply(user);
   } catch (err) {

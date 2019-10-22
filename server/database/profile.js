@@ -21,10 +21,10 @@ DATABASE.on("db/profile/update", async res => {
     user.middleName = middleName;
     user.surName = surName;
     user.setPassword(newPassword);
-    user.avatar = avatar;
+    user.image = avatar;
 
     await user.save();
-    res.reply(user);
+    res.reply(User.getMainFields(user));
   } catch (error) {
     console.error(error);
   }

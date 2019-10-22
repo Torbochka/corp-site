@@ -32,7 +32,9 @@ DATABASE.on("db/users/permission", async res => {
 
     user.permission = permission;
 
-    res.reply(await user.save());
+    await user.save();
+
+    res.reply(User.getMainFields(user));
   } catch (err) {
     res.replyErr({ message: err.message });
   }

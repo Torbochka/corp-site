@@ -8,7 +8,8 @@
     "rolling": false,
     "renew": false
   },
-  "upload": "./dist/upload",
+  "upload": "./dist/assets/upload",
+  "uploadFront": "./assets/upload",
   "accessTokenSecret": "access",
   "refreshTokenSecret": "refresh",
   "accessTokenExpiredAt": 15000,
