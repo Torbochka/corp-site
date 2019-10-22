@@ -9,8 +9,11 @@ const isAuthenticated = async (ctx, next) => {
     ctx.headers.hasOwnProperty("authorization") &&
     ctx.headers.authorization
   ) {
-    // const accessToken = ctx.headers.authorization.slice(7);
-    const accessToken = ctx.headers.authorization;
+    let accessToken = ctx.headers.authorization;
+
+    if (accessToken.includes("Bearer")) {
+      accessToken = ctx.headers.authorization.slice(7);
+    }
 
     jwt.verify(accessToken, config.accessTokenSecret, (err, decoded) => {
       if (err) {
@@ -36,7 +39,7 @@ const isAuthenticated = async (ctx, next) => {
 
 router.get("/error", ctx => {
   const error = ctx.flash("error")[0];
-  ctx.status = error.status;
+  ctx.status = error.status || 400;
   ctx.body = { message: error.message };
 });
 

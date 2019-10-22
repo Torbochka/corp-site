@@ -16,7 +16,7 @@ router.get("/profile", async ctx => {
 
 router.patch("/profile", async ctx => {
   try {
-    ctx.body = await ENGINE.emit("updateProfile", ctx);
+    ctx.body = await ENGINE.emit("profile/update", ctx);
   } catch (error) {
     ctx.flash("error", {
       message: error.message,

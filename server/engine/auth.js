@@ -45,9 +45,13 @@ const generateTokens = (
 
 ENGINE.on("registration", async res => {
   try {
-    const User = await DATABASE.emit("db/registration", res.data);
+    const user = await DATABASE.emit("db/registration", res.data);
+    const upUser = await DATABASE.emit("db/updateTokens", {
+      user,
+      ...generateTokens(user, config)
+    });
 
-    res.reply(User);
+    res.reply(upUser);
   } catch (err) {
     res.replyErr({ message: err.message });
   }
@@ -56,15 +60,13 @@ ENGINE.on("registration", async res => {
 ENGINE.on("login", async res => {
   try {
     const user = await DATABASE.emit("db/user", res.data);
-    const tokens = generateTokens(user, config);
-
-    await DATABASE.emit("db/updateTokens", {
+    const upUser = await DATABASE.emit("db/updateTokens", {
       user,
-      ...tokens
+      ...generateTokens(user, config)
     });
 
     res.reply({
-      ...tokens
+      ...upUser
     });
   } catch (err) {
     res.replyErr({ message: err.message });

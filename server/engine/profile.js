@@ -11,14 +11,14 @@ ENGINE.on("profile", async res => {
   }
 });
 
-ENGINE.on("updateProfile", async res => {
+ENGINE.on("profile/update", async res => {
   try {
     const {
       decoded: { id },
       request: { body }
     } = res.data;
 
-    const user = await DATABASE.emit("db/updateProfile", { id, ...body });
+    const user = await DATABASE.emit("db/profile/update", { id, ...body });
 
     res.reply(user);
   } catch (err) {

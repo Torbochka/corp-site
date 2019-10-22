@@ -18,9 +18,24 @@ const userSchema = new Schema({
     required: [true, "Password required"]
   },
   permission: {
-    chat: { C: Boolean, R: Boolean, U: Boolean, D: Boolean },
-    news: { C: Boolean, R: Boolean, U: Boolean, D: Boolean },
-    settings: { C: Boolean, R: Boolean, U: Boolean, D: Boolean }
+    chat: {
+      C: { type: Boolean, default: false },
+      R: { type: Boolean, default: false },
+      U: { type: Boolean, default: false },
+      D: { type: Boolean, default: false }
+    },
+    news: {
+      C: { type: Boolean, default: true },
+      R: { type: Boolean, default: true },
+      U: { type: Boolean, default: true },
+      D: { type: Boolean, default: true }
+    },
+    settings: {
+      C: { type: Boolean, default: true },
+      R: { type: Boolean, default: true },
+      U: { type: Boolean, default: true },
+      D: { type: Boolean, default: true }
+    }
   },
   accessToken: { type: String, default: "" },
   accessTokenExpiredAt: {
@@ -40,6 +55,28 @@ userSchema.methods.setPassword = function(password) {
 
 userSchema.methods.validPassword = function(password) {
   return bCrypt.compareSync(password, this.password);
+};
+
+userSchema.statics.getMainFields = function(user) {
+  return {
+    id: user.id,
+    image: user.image,
+    firstName: user.firstName,
+    middleName: user.middleName,
+    username: user.username,
+    surName: user.surName,
+    permission: user.permission,
+    accessToken: user.accessToken,
+    refreshToken: user.refreshToken,
+    accessTokenExpiredAt: user.accessTokenExpiredAt,
+    refreshTokenExpiredAt: user.refreshTokenExpiredAt
+  };
+};
+
+userSchema.statics.getUsersWithMainFields = async function() {
+  const users = await this.find({});
+
+  return users.map(user => this.getMainFields(user));
 };
 
 const user = mongoose.model("user", userSchema);

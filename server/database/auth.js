@@ -48,8 +48,8 @@ DATABASE.on("db/updateTokens", async res => {
     user.accessTokenExpiredAt = accessTokenExpiredAt;
     user.refreshTokenExpiredAt = refreshTokenExpiredAt;
 
-    await user.save();
-    res.reply({});
+    const upUser = await user.save();
+    res.reply(User.getMainFields(upUser));
   } catch (error) {
     console.error(error);
   }
@@ -74,8 +74,7 @@ DATABASE.on("db/registration", async res => {
 
     newUser.setPassword(password);
 
-    const user = await newUser.save();
-    res.reply(user);
+    res.reply(await newUser.save());
   } catch (error) {
     console.log(error);
   }

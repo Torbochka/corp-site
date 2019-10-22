@@ -4,8 +4,7 @@ const ENGINE = global.ENGINE;
 
 router.post("/registration", async ctx => {
   try {
-    const user = await ENGINE.emit("registration", ctx.request.body);
-    ctx.body = { ...user };
+    ctx.body = await ENGINE.emit("registration", ctx.request.body);
   } catch (error) {
     ctx.flash("error", {
       message: error.message,

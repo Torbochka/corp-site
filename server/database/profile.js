@@ -1,7 +1,7 @@
 const DATABASE = global.DATABASE;
 const User = require("../models/user");
 
-DATABASE.on("db/updateProfile", async res => {
+DATABASE.on("db/profile/update", async res => {
   try {
     const {
       id,
