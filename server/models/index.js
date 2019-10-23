@@ -6,9 +6,17 @@ mongoose.Promise = global.Promise;
 let uri =
   process.env.DB === "production" ? process.env.uriDB : process.env.uriDBTest;
 
-mongoose.connect(uri, {
-  useNewUrlParser: true
-});
+mongoose.connect(
+  uri,
+  {
+    useNewUrlParser: true
+  },
+  err => {
+    if (err) {
+      return console.error(err.message);
+    }
+  }
+);
 
 mongoose.connection.on("connected", () => {
   console.log(`Mongoose connection open ${uri}`);

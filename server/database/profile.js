@@ -8,13 +8,23 @@ DATABASE.on("db/profile/update", async res => {
       firstName,
       middleName,
       surName,
+      oldPassword,
       newPassword,
       avatar
     } = res.data;
 
-    const user = await User.findOne({ _id: id }).exec();
+    const user = await User.findOne({ _id: id });
+
     if (!user) {
-      return res.replyErr({ message: "Пользователь не зарегистрирован!" });
+      return res.replyErr({ message: "User not registered!" });
+    }
+
+    if (!user.validPassword(oldPassword)) {
+      return res.replyErr({ message: "Old password unvalid!" });
+    }
+
+    if (newPassword === "") {
+      return res.replyErr({ message: "New password is empty!" });
     }
 
     user.firstName = firstName;

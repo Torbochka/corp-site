@@ -32,6 +32,7 @@ ENGINE.on("profile/update", async res => {
         `${Date.now()}-${files.avatar.name}`
       );
       await rename(files.avatar.path, `dist/${fullPath}`);
+
       body.avatar = fullPath;
     }
 

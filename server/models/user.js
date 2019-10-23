@@ -25,16 +25,16 @@ const userSchema = new Schema({
       D: { type: Boolean, default: false }
     },
     news: {
-      C: { type: Boolean, default: true },
-      R: { type: Boolean, default: true },
-      U: { type: Boolean, default: true },
-      D: { type: Boolean, default: true }
+      C: { type: Boolean, default: false },
+      R: { type: Boolean, default: false },
+      U: { type: Boolean, default: false },
+      D: { type: Boolean, default: false }
     },
     settings: {
-      C: { type: Boolean, default: true },
-      R: { type: Boolean, default: true },
-      U: { type: Boolean, default: true },
-      D: { type: Boolean, default: true }
+      C: { type: Boolean, default: false },
+      R: { type: Boolean, default: false },
+      U: { type: Boolean, default: false },
+      D: { type: Boolean, default: false }
     }
   },
   accessToken: { type: String, default: "" },

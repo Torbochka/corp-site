@@ -1,5 +1,5 @@
 module.exports = io => {
-  var users = new Set();
+  const users = new Set();
 
   io.on("connection", () => {
     console.log("a user connected");
@@ -25,6 +25,7 @@ module.exports = io => {
     } = ctx;
 
     socket.to(roomId).emit("message:add", { text, senderId });
+    socket.emit("message:add", { text, senderId });
   });
 
   io.on("disconnect", ctx => {

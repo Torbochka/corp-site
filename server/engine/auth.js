@@ -92,7 +92,7 @@ ENGINE.on("refresh-token", res => {
           if (!user || refreshToken !== user.refreshToken) {
             return res.replyErr({
               status: 401,
-              message: "Ошибка авторизации"
+              message: "Authorisation error"
             });
           }
 
@@ -118,6 +118,6 @@ ENGINE.on("refresh-token", res => {
       }
     );
   } else {
-    res.replyErr({ message: "Ошибка авторизации" });
+    res.replyErr({ message: "Authorisation error" });
   }
 });

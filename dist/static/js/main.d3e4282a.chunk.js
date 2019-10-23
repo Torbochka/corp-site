@@ -1869,10 +1869,10 @@
                 value: function() {
                   (0, this.props.dispatch)(function(e, t) {
                     var a = U(t());
-                    (kt = Ct()("http://localhost:3000")).emit("users:connect", {
-                      id: a.id,
-                      username: a.username
-                    }),
+                    (kt = Ct()("https://loft-system-api.herokuapp.com")).emit(
+                      "users:connect",
+                      { id: a.id, username: a.username }
+                    ),
                       kt
                         .on("users:list", function(t) {
                           return e(_t(t));
@@ -2971,4 +2971,4 @@
   },
   [[195, 1, 2]]
 ]);
-//# sourceMappingURL=main.2d8784ca.chunk.js.map
+//# sourceMappingURL=main.d3e4282a.chunk.js.map

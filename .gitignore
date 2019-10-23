@@ -35,8 +35,8 @@ Thumbs.db
 bower_components
 build
 dist/assets/upload
-dist2/assets/upload
-dist1/assets/upload
+dist2
+dist1
 06-webinar-auth
 05-webinar-socket
 08-webinar-deploy

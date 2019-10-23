@@ -66,5 +66,5 @@ app.use(router.allowedMethods());
 
 app.listen(port, () => {
   utils.existDirORcreate(config.upload);
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on port:${port}`);
 });
