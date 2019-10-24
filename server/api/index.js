@@ -37,7 +37,7 @@ const isAuthenticated = async (ctx, next) => {
   }
 };
 
-router.get("/error", ctx => {
+router.get("/error", async ctx => {
   const error = ctx.flash("error")[0];
   ctx.status = error.status || 400;
   ctx.body = { message: error.message };

@@ -57,6 +57,47 @@ userSchema.methods.validPassword = function(password) {
   return bCrypt.compareSync(password, this.password);
 };
 
+userSchema.methods.updateProfile = async function({
+  oldPassword,
+  newPassword,
+  firstName,
+  middleName,
+  surName,
+  avatar
+}) {
+  if ((oldPassword && !newPassword) || (newPassword && !oldPassword)) {
+    return { error: true, message: "oldPassword or newPassword is empty!" };
+  }
+
+  if (oldPassword && newPassword) {
+    if (!this.validPassword(oldPassword)) {
+      return { error: true, message: "Old password unvalid!" };
+    }
+
+    this.setPassword(newPassword);
+  }
+
+  if (firstName) {
+    this.firstName = firstName;
+  }
+
+  if (middleName) {
+    this.middleName = middleName;
+  }
+
+  if (surName) {
+    this.surName = surName;
+  }
+
+  if (avatar) {
+    this.image = avatar;
+  }
+
+  await this.save();
+
+  return { error: false, message: "" };
+};
+
 userSchema.statics.getMainFields = function(user) {
   return {
     id: user.id,
