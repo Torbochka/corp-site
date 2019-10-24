@@ -4,7 +4,7 @@
   "author": "krabaton",
   "license": "ISC",
   "scripts": {
-    "server": "PORT=3000 nodemon  $NODE_DEBUG_OPTION ./app.js",
+    "server": "PORT=3000 nodemon $NODE_DEBUG_OPTION ./app.js",
     "start": "node ./app.js"
   },
   "devDependencies": {
